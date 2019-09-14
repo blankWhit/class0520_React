@@ -1,11 +1,19 @@
 import React,{Component} from 'react';
 import { Form,Icon,Input,Button,message } from 'antd';
 
-import axios from 'axios';
+import { reqLogin } from '../../api';
+
+import {connect} from 'react-redux';
+import {saveUser} from "@redux/action-creators";
 
 import logo from './logo.png';
 import './index.less';
 
+
+@connect(
+    null,
+    {saveUser}
+)
 @Form.create()
 class Login extends Component{
 
@@ -41,31 +49,32 @@ class Login extends Component{
     login = (e)=>{
         e.preventDefault();
         //校验表单
-        this.props.form.validateFields((err,values)=>{
+        this.props.form.validateFields(async(err,values)=>{
 
             if (!err){
                 //校验通过
                 const { username,password } = values;
                 //发送请求。请求登录
-                axios.post('http://localhost:3000/api/login',{username,password})
-                .then((response)=>{
+                reqLogin(username,password)
+
+                    .then((result)=>{
 
                     //请求成功
-                    if (response.data.status === 0){
-                        //登录成功
-                        message.success('登录成功~')
 
-                        //跳转到Home
-                     this.props.history.replace('/');
+                    //登录成功
+                    message.success('登录成功~')
 
-                    }else{
-                        //登录失败
-                        message.error(response.data.msg);
-                    }
+                    //保存用户数据  redux localstorage
+                    this.props.saveUser(result);
+
+                    //跳转到Home
+                    this.props.history.replace('/');
+
                 })
-                .catch((error)=>{
-                    //请求失败
-                    message.error('未知错误，请联系管理员~');
+
+                    .catch(()=>{
+                    //清空密码
+                    this.props.form.resetFields(['password']);
                 })
 
             }
@@ -125,7 +134,6 @@ class Login extends Component{
                         </Form.Item>
 
                     </Form>
-
 
                 </section>
             </div>;
