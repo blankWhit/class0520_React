@@ -1,5 +1,9 @@
 import React,{Component} from 'react';
+import withCheckLogin from '@conts/with-check-login';
 
+import BasicLayout from '../basic-layout';
+
+@withCheckLogin
 class Home extends Component{
 
     render() {
@@ -9,7 +13,7 @@ class Home extends Component{
             </div>
         );
     }
-
 }
+
 
 export default Home;

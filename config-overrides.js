@@ -24,6 +24,7 @@ module.exports = override(
         '@comps':resolve(__dirname,'src/components'),
         '@conts':resolve(__dirname,'src/contaniers'),
         '@redux':resolve(__dirname,'src/redux'),
+        '@assets':resolve(__dirname,'src/assets'),
         '@config':resolve(__dirname,'src/config'),
     })
 );
