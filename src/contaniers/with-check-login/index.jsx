@@ -19,15 +19,17 @@ function withCheckLogin(WrappedComponent) {
             //登录校验
 
             //当前路径
-            const { token,location,history,match } = this.props;
-            const { pathname } = location;
+            const { token,
+                ...rest //包含剩下所有属性的一个对象
+            } = this.props;
+            const { location:{pathname} } = rest;
 
             if (pathname === '/login' && token) return <Redirect to='/'/>
 
             if (pathname !== '/login' && !token) return <Redirect to='/login'/>
 
 
-            return <WrappedComponent location={location} history={history} match={match}/>;
+            return <WrappedComponent {...rest}/>;
         }
     })
 

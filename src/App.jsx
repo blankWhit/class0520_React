@@ -1,6 +1,8 @@
-import React,{Component} from 'react';
+import React,{Component,Suspense} from 'react';
 import {BrowserRouter as Router, Route,Switch} from 'react-router-dom';
+import { Spin } from 'antd';
 
+import Login from '@conts/login';
 import NotMatch from '@comps/not-match';
 import BasicLayout from '@comps/basic-layout';
 import routes from './config/routes';
@@ -9,24 +11,35 @@ import routes from './config/routes';
 class App extends Component{
 
     render() {
-        return (
-            <Router>
-                <BasicLayout>
+            //Suppense 用于懒加载
+
+          return <Suspense fallback={<Spin size="large" />}>
+
+                <Router>
 
                     <Switch>
-                        {
-                            routes.map((route,index)=>{
-                                return <Route {...route} key={index} />
-                            })
-                        }
-                        <Route component={NotMatch} />
+
+                        <Route path="/login" component={Login} exact />
+
+                        <BasicLayout>
+
+                            <Switch>
+                                {
+                                    routes.map((route,index)=>{
+                                        return <Route {...route} key={index} />
+                                    })
+                                }
+                                <Route component={NotMatch} />
+                            </Switch>
+
+                        </BasicLayout>
+
                     </Switch>
 
-                </BasicLayout>
+                </Router>
 
-            </Router>
+            </Suspense>
 
-        );
     }
 
   }

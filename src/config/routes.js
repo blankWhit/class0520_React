@@ -1,5 +1,4 @@
 import Home from "@comps/home";
-import Login from "@conts/login";
 
 const routes = [
     {
@@ -7,11 +6,6 @@ const routes = [
         exact:true,
         component:Home
     },
-    {
-        path:"/login",
-        exact:true,
-        component:Login
-    }
 
 ]
 
