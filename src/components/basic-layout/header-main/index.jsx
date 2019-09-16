@@ -1,10 +1,24 @@
 import React,{ Component } from 'react';
-import {Button,Icon} from 'antd';
+import {Button,Icon,Modal} from 'antd';
 import screenfull from 'screenfull';
 import { withTranslation,getI18n } from 'react-i18next';
+import { connect } from 'react-redux';
+import dayjs from 'dayjs';
 
+import { removeUser } from '@redux/action-creators';
+import { formatDate } from '../../../utils/tools';
+//import { formatDate } from '@utils/tools';
 import './index.less';
 
+
+@connect(
+    (state)=>({
+        username:state.user.user.username,
+        title:state.title
+    }),
+    { removeUser }
+
+)
 
 @withTranslation()
 class headerMain extends Component{
@@ -12,7 +26,8 @@ class headerMain extends Component{
     state = {
         isScreenFull:false,
         isEnglish:getI18n().language === 'en',
-
+        //title:formatDate()
+        time:dayjs().format('YYYY-MM-DD HH:mm:ss')
     }
 
     screenFull = ()=>{
@@ -42,6 +57,15 @@ class headerMain extends Component{
     componentDidMount() {
         //绑定事件
         screenfull.on('change',this.change);
+
+        //设置定时器
+        setInterval(()=>{
+            this.setState({
+               // time:formatDate()
+                time:dayjs().format('YYYY-MM-DD HH:mm:ss')
+            })
+        },1000)
+
     }
 
     componentWillUnmount() {
@@ -49,9 +73,22 @@ class headerMain extends Component{
         screenfull.off("change",this.change)
     }
 
+    logout = ()=>{
+        //显示对话框
+        Modal.confirm({
+            title:'您确定要退出登录吗？',
+            onOk:()=>{
+                //点击确定按钮的回调函数
+                this.props.removeUser();
+            },
+            okText:'确定',
+            cancelText:'取消'
+        })
+    }
 
     render() {
-        const {isScreenFull,isEnglish} = this.state;
+        const {isScreenFull,isEnglish,time} = this.state;
+        const { username,title,t } = this.props;
 
         return <div className="header-main">
 
@@ -64,15 +101,19 @@ class headerMain extends Component{
                 <Button size="small" className="header-main-btn" onClick={this.changeLanguage}>{isEnglish?'中文':'English'}
                 </Button>
 
-                <span>欢迎，xxx</span>
+                <span>欢迎，{username}</span>
 
-                <Button type="link">退出</Button>
+                <Button type="link" onClick={this.logout}>退出</Button>
 
             </div>
             <div className="header-main-bottom">
 
-                <h3>首页</h3>
-                <span>2019.9.16 11:15:35</span>
+                <h3>{t(title)}</h3>
+                <span>{time}</span>
+                {/*获取时间的库：
+                   *    -dayjs
+                   *    -moment
+                 **/}
 
             </div>
 

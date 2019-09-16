@@ -26,5 +26,6 @@ module.exports = override(
         '@redux':resolve(__dirname,'src/redux'),
         '@assets':resolve(__dirname,'src/assets'),
         '@config':resolve(__dirname,'src/config'),
+        '@utils':resolve(__dirname,'src/utils'),
     })
 );
