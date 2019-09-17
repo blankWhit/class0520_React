@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import { Form,Icon,Input,Button,message } from 'antd';
 
-import { reqLogin } from '../../api';
+import { reqLogin } from '@api';
 import withCheckLogin from '@conts/with-check-login';
 
 import {connect} from 'react-redux';

@@ -28,7 +28,7 @@ instance.interceptors.request.use(
 
         if (token) {
             //加上公共的请求头参数
-            config.headers.authorization = token;
+            config.headers.authorization = `Bearer ${token}`;
         }
         return config;
     }
