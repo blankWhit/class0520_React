@@ -58,6 +58,7 @@ class Category extends Component{
     };
 
     componentDidMount() {
+        if (this.props.categories.length) return;
         //发送请求，请求分类数据
         this.props.getCategories();
     }
